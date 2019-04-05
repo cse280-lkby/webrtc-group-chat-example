@@ -5,10 +5,6 @@
 			  src="http://code.jquery.com/jquery-3.3.1.min.js"
 			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 			  crossorigin="anonymous"></script>
-        <!-- This adapter.js file de-prefixes the webkit* and moz* prefixed RTC
-             methods. When RTC becomes a more solid standard, this adapter should no
-             longer be necessary. -->
-        <!-- <script src="https://webrtc.googlecode.com/svn/trunk/samples/js/base/adapter.js"></script> -->
         <style>
             html, body { 
                 background-color: #333; 
@@ -24,8 +20,7 @@
             /** CONFIG **/
             const SIGNALING_SERVER = undefined// = "http://localhost";
             const USE_AUDIO = true;
-            // var USE_VIDEO = true;
-            const USE_VIDEO = false;
+            const USE_VIDEO = true;
             const DEFAULT_CHANNEL = 'some-global-channel-name';
             const MUTE_AUDIO_BY_DEFAULT = false;
 
