@@ -30,6 +30,7 @@ main.get('/', function(req, res){ res.sendFile(__dirname + '/client.html'); });
 /*** INTERESTING STUFF ***/
 /*************************/
 var channels = {};
+var userdata = {};
 var sockets = {};
 
 /**
@@ -57,12 +58,13 @@ io.sockets.on('connection', function (socket) {
 
 
     socket.on('join', function (config) {
-        console.log("["+ socket.id + "] join ", config);
+        const myId = socket.id;
+        console.log("["+ myId + "] join ", config);
         var channel = config.channel;
-        var userdata = config.userdata;
+        userdata[myId] = config.userdata;
 
         if (channel in socket.channels) {
-            console.log("["+ socket.id + "] ERROR: already joined ", channel);
+            console.log("["+ myId + "] ERROR: already joined ", channel);
             return;
         }
 
@@ -71,11 +73,13 @@ io.sockets.on('connection', function (socket) {
         }
 
         for (id in channels[channel]) {
-            channels[channel][id].emit('addPeer', {'peer_id': socket.id, 'should_create_offer': false});
-            socket.emit('addPeer', {'peer_id': id, 'should_create_offer': true});
+            // Adds this client to other clients
+            channels[channel][id].emit('addPeer', {'peer_id': myId, 'should_create_offer': false, 'userdata': userdata[myId]});
+            // Adds other people to this client
+            socket.emit('addPeer', {'peer_id': id, 'should_create_offer': true, 'userdata': userdata[id]});
         }
 
-        channels[channel][socket.id] = socket;
+        channels[channel][myId] = socket;
         socket.channels[channel] = channel;
     });
 
